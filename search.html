@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>search</title>
+</head>
+<body>
+    <form action="" method="GET" style="text-align: center;">
+		<input type="hidden" name="csrfmiddlewaretoken" value="WqW92DI9TGaNFVHS2PoPANk8RpMqH1JTSZqh2emKTJOknTn5kLxx3tlJMNc2d8zJ">
+        <p>
+        <input value="Greece4ever" id="search" name="search" style="height: 50px;width: 400px;border: 1px solid green;" type="text" placeholder="Search">
+        </p>
+        <p>
+        <button onclick="searchGit()" id="submit" style="background-color:rgb(9, 49, 134);border-color:rgb(9, 49, 134); width: 200px;height: 25px;color: #ffffff;font-family: fantasy;border-radius: 12px;" type="button" >CLICK ME </button>
+        </p>
+        <div style="text-align: center;border: 2px solid black;margin-right: 25%;margin-left: 25%;margin-top: 50px;padding: 50;"> 
+            <b id="peos">Here your results will be displayed</b>
+        </div>
+    </form >
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        var status = null;
+        let x =  document.getElementById("search")
+        x.addEventListener("keydown", () => {
+            console.log("typing")
+            if (status != undefined) clearTimeout(status)
+            status = setTimeout(searchGit, 250);
+        })
+
+        const z = () => {
+            return x.value;
+        }
+
+        
+
+        const searchGit = () => {
+            console.log("STARTING")
+            axios({
+            method:  'GET',
+            url: `https://api.github.com/users/${z()}`,
+
+            })
+            .then((response) => {
+            res = response.status
+            let f = document.getElementById("peos");
+            f.innerHTML = `
+            <a target="_blank" href="${response.data.html_url}"><img src="${response.data.avatar_url}" /> </a>
+            <p> Name : <b style="color:rgb(7, 60, 204);font-family: fantasy"> ${response.data.login}</b> , </p> \n
+            <hr>
+            <p> Number of followers : <b style="color: greenyellow;">${response.data.followers} </b>, </p> \n
+            <hr>
+            <p> Number of public repos :  <b style="color: lightslategrey;" >${response.data.public_repos} </b>,</p> </p> \n
+            `;
+            }
+            ,(error) => {
+            console.log("error")
+        })
+        }
+        searchGit()
+
+        const f = document.getElementById("submit")
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fondamento&display=swap');
+
+        #peos img {
+            border: 4px solid rgb(13, 6, 107);
+            border-radius: 300px;
+            height: 300px;
+        }
+        #peos p {
+            font-family: 'Fondamento', cursive;
+        }
+
+        @media only screen and (max-width: 800px) {
+            #peos img {
+                height: 200px;
+            }
+        
+        }
+    </style>
+</body>
+</html>
